@@ -3,7 +3,7 @@ import React from 'react';
 import { Grid } from '@mui/material';
 import SummaryCard from './SummaryCard';
 
-const SummaryCardsSection = ({ totalExpenses, totalIncome }) => {
+const SummaryCardsSection = ({ totalExpenses, totalIncome, totalSavings }) => {
   return (
     <Grid container spacing={3} justifyContent="center">
       <Grid item xs={12} sm={6}>
@@ -16,7 +16,7 @@ const SummaryCardsSection = ({ totalExpenses, totalIncome }) => {
         <SummaryCard title="Remaining Budget" value="$1111.11" path="/budget" />
       </Grid>
       <Grid item xs={12} sm={6}>
-        <SummaryCard title="Savings" value="$789.10" path="/reports" />
+        <SummaryCard title="Savings" value={`$${totalSavings.toFixed(1)}`} />
       </Grid>
     </Grid>
   );

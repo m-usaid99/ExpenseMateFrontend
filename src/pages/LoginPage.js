@@ -9,18 +9,20 @@ const LoginPage = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, error, userInfo } = useSelector((state) => state.user);
+  const { loading, error } = useSelector((state) => state.user);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = async (event) => {
-    event.preventDefault();
-    dispatch(login({ email, password }))
-    if (userInfo) {
-      navigate('/dashboard');
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      await dispatch(login({ email, password })).unwrap();
+      navigate('/dashboard'); // Redirect to dashboard on successful login
+    } catch (err) {
+      console.error('Failed to login:', err);
     }
-  }
+  };
 
   return (
     <Container maxWidth="sm" sx={{ bgcolor: theme.palette.background.default }}>

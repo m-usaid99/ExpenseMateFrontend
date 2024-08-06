@@ -14,6 +14,8 @@ const Dashboard = () => {
   const totalExpenses = useSelector(selectTotalExpenses);
   const totalIncome = useSelector(selectTotalIncome);
 
+  const totalSavings = totalIncome - totalExpenses;
+
   useEffect(() => {
     dispatch(fetchExpensesAsync());
     dispatch(fetchIncomesAsync());
@@ -33,7 +35,7 @@ const Dashboard = () => {
         <Typography variant="h4" gutterBottom>
           Dashboard
         </Typography>
-        <SummaryCardsSection totalExpenses={totalExpenses} totalIncome={totalIncome} />
+        <SummaryCardsSection totalExpenses={totalExpenses} totalIncome={totalIncome} totalSavings={totalSavings} />
         <ChartsSection />
         <RecentTransactions />
       </Container>
