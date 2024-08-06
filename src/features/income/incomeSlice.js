@@ -126,7 +126,9 @@ export const selectIncomeTrendsData = (state) => {
 
   incomes.forEach((income) => {
     const month = format(parseISO(income.date), 'yyyy-MM');
-    aggregatedData[month] += parseFloat(income.amount);
+    if (aggregatedData[month] !== undefined) {
+      aggregatedData[month] += parseFloat(income.amount);
+    }
   });
 
   const sortedMonths = Object.keys(aggregatedData).sort(

@@ -1,5 +1,5 @@
-import { createSlice, createSelector, createAsyncThunk } from "@reduxjs/toolkit";
-import { subMonths, parseISO, format, startOfMonth, endOfMonth, eachMonthOfInterval } from "date-fns";
+import { createSlice, createAsyncThunk, createSelector } from "@reduxjs/toolkit";
+import { subMonths, parseISO, format, eachMonthOfInterval, startOfMonth, endOfMonth } from "date-fns";
 import { fetchExpenses, addExpense, updateExpense, deleteExpense } from "../../api/expenseService";
 
 export const fetchExpensesAsync = createAsyncThunk('expenses/fetchExpenses', async () => {
@@ -15,7 +15,7 @@ export const addExpenseAsync = createAsyncThunk("expenses/addExpense", async (ex
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response.data);
   }
-})
+});
 
 export const updateExpenseAsync = createAsyncThunk('expenses/updateExpense', async ({ id, expenseData }, thunkAPI) => {
   try {
@@ -95,13 +95,13 @@ const expensesSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteExpenseAsync.fulfilled, (state, action) => {
-        state.incomes = state.expenses.filter(income => income._id !== action.payload);
+        state.expenses = state.expenses.filter(expense => expense._id !== action.payload);
         state.loading = false;
       })
-      .addCase((deleteExpenseAsync.rejected), (state, action) => {
+      .addCase(deleteExpenseAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      })
+      });
   },
 });
 
@@ -124,7 +124,9 @@ export const selectExpenseTrendsData = (state) => {
 
   expenses.forEach((expense) => {
     const month = format(parseISO(expense.date), "yyyy-MM");
-    aggregatedData[month] += parseFloat(expense.amount);
+    if (aggregatedData[month] !== undefined) {
+      aggregatedData[month] += parseFloat(expense.amount);
+    }
   });
 
   const sortedMonths = Object.keys(aggregatedData).sort(

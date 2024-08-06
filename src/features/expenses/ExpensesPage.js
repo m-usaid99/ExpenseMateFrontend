@@ -18,7 +18,7 @@ import ExpenseTrends from "./ExpenseTrends";
 
 const ExpensesPage = () => {
   const dispatch = useDispatch();
-  const { expenses, loading, error } = useSelector((state) => state.expenses);
+  const { expenses } = useSelector((state) => state.expenses);
   const totalExpenses = useSelector(selectTotalExpenses);
   const expenseTrendsData = useSelector(selectExpenseTrendsData);
   const [filters, setFilters] = useState({
@@ -105,6 +105,8 @@ const ExpensesPage = () => {
     );
   });
 
+  const sortedExpenses = filteredExpenses.sort((a, b) => new Date(b.date) - new Date(a.date));
+
   return (
     <Layout>
       <Container
@@ -135,7 +137,7 @@ const ExpensesPage = () => {
           />
         </Box>
         <ExpenseList
-          expenses={filteredExpenses}
+          expenses={sortedExpenses}
           onEdit={handleEditExpense}
           onDelete={handleDeleteExpense}
         />

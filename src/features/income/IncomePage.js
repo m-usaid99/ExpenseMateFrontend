@@ -18,7 +18,7 @@ import IncomeTrends from "./IncomeTrends";
 
 const IncomePage = () => {
   const dispatch = useDispatch();
-  const { incomes, loading, error } = useSelector((state) => state.income);
+  const { incomes } = useSelector((state) => state.income);
   const totalIncome = useSelector(selectTotalIncome);
   const incomeTrendsData = useSelector(selectIncomeTrendsData);
   const [filters, setFilters] = useState({
@@ -103,6 +103,8 @@ const IncomePage = () => {
     );
   });
 
+  const sortedIncome = filteredIncome.sort((a, b) => new Date(b.date) - new Date(a.date));
+
   return (
     <Layout>
       <Container
@@ -133,7 +135,7 @@ const IncomePage = () => {
           />
         </Box>
         <IncomeList
-          income={filteredIncome}
+          income={sortedIncome}
           onEdit={handleEditIncome}
           onDelete={handleDeleteIncome}
         />
