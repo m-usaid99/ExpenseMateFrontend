@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, createSelector } from "@reduxjs/toolkit";
 import { subMonths, parseISO, format, eachMonthOfInterval, startOfMonth, endOfMonth } from "date-fns";
 import { fetchExpenses, addExpense, updateExpense, deleteExpense } from "../../api/expenseService";
+import { showNotification } from '../notifications/notificationSlice'; // Import showNotification action
 
 export const fetchExpensesAsync = createAsyncThunk('expenses/fetchExpenses', async () => {
   const response = await fetchExpenses();
@@ -11,8 +12,10 @@ export const addExpenseAsync = createAsyncThunk("expenses/addExpense", async (ex
   try {
     const newExpense = await addExpense(expenseData);
     thunkAPI.dispatch(fetchExpensesAsync()); // Fetch updated data
+    thunkAPI.dispatch(showNotification({ message: 'Expense added successfully!', type: 'success' })); // Dispatch success notification
     return newExpense;
   } catch (error) {
+    thunkAPI.dispatch(showNotification({ message: 'Failed to add expense.!', type: 'error' })); // Dispatch success notification
     return thunkAPI.rejectWithValue(error.response.data);
   }
 });
@@ -32,8 +35,10 @@ export const deleteExpenseAsync = createAsyncThunk("expenses/deleteExpense",
     try {
       await deleteExpense(id);
       thunkAPI.dispatch(fetchExpensesAsync()); // Fetch updated data
+      thunkAPI.dispatch(showNotification({ message: 'Expense deleted successfully!', type: 'success' })); // Dispatch success notification
       return id;
     } catch (error) {
+      thunkAPI.dispatch(showNotification({ message: 'Failed to delete expense!', type: 'error' })); // Dispatch success notification
       return thunkAPI.rejectWithValue(error.response.data);
     }
   });

@@ -11,10 +11,12 @@ import Reports from './pages/Reports';
 import RegistrationPage from './pages/RegistrationPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
+import NotificationSnackbar from './components/NotificationSnackbar';
 
 function App() {
   return (
     <Router>
+      <NotificationSnackbar />
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<RegistrationPage />} />

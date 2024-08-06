@@ -2,6 +2,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchIncomes, addIncome, updateIncome, deleteIncome } from '../../api/incomeService';
 import { parseISO, format, subMonths, eachMonthOfInterval } from 'date-fns';
+import { showNotification } from '../notifications/notificationSlice'; // Import showNotification action
 
 export const fetchIncomesAsync = createAsyncThunk('expenses/fetchIncomes', async () => {
   const response = await fetchIncomes();
@@ -12,8 +13,10 @@ export const addIncomeAsync = createAsyncThunk('income/addIncome', async (income
   try {
     const newIncome = await addIncome(incomeData);
     thunkAPI.dispatch(fetchIncomesAsync()); // Fetch updated data
+    thunkAPI.dispatch(showNotification({ message: 'Income added successfully!', type: 'success' })); // Dispatch success notification
     return newIncome;
   } catch (error) {
+    thunkAPI.dispatch(showNotification({ message: 'Failed to add income!', type: 'error' })); // Dispatch success notification
     return thunkAPI.rejectWithValue(error.response.data);
   }
 });
@@ -22,8 +25,10 @@ export const updateIncomeAsync = createAsyncThunk('income/updateIncome', async (
   try {
     const updatedIncome = await updateIncome(id, incomeData);
     thunkAPI.dispatch(fetchIncomesAsync()); // Fetch updated data
+    thunkAPI.dispatch(showNotification({ message: 'Income updated successfully!', type: 'success' })); // Dispatch success notification
     return updatedIncome;
   } catch (error) {
+    thunkAPI.dispatch(showNotification({ message: 'Failed to update income.!', type: 'error' })); // Dispatch success notification
     return thunkAPI.rejectWithValue(error.response.data);
   }
 });
@@ -32,8 +37,10 @@ export const deleteIncomeAsync = createAsyncThunk('income/deleteIncome', async (
   try {
     await deleteIncome(id);
     thunkAPI.dispatch(fetchIncomesAsync()); // Fetch updated data
+    thunkAPI.dispatch(showNotification({ message: 'Income deleted successfully!', type: 'success' })); // Dispatch success notification
     return id;
   } catch (error) {
+    thunkAPI.dispatch(showNotification({ message: 'Failed to delete income.!', type: 'error' })); // Dispatch success notification
     return thunkAPI.rejectWithValue(error.response.data);
   }
 });
